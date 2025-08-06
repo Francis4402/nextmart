@@ -12,6 +12,7 @@ const ManageProductsPage = async ({
 
   const {data, meta} = await getAllProducts(page, "3");
 
+
   return (
     <div>
       <ManageProducts products={data} meta={meta} />

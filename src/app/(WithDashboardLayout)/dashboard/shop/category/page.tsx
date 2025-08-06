@@ -6,10 +6,11 @@ const Category = async () => {
 
   const {data} = await getAllCategories();
 
+  console.log(data);
 
   return (
     <div>
-        <ManageCategories categories={data} />  
+        <ManageCategories categories={data} />
     </div>
   )
 }

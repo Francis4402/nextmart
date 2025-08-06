@@ -49,10 +49,10 @@ const CreateShopForm = () => {
   
         const res = await createShop(formData);
   
-        console.log(res);
-  
         if (res.success) {
           toast.success(res.message);
+        } else {
+          toast.error(res.message);
         }
       } catch (err: any) {
         console.error(err);

@@ -138,10 +138,12 @@ const UpdateProductForm = ({product}: {product: IProduct}) => {
 
             if (res.success) {
                 toast.success(res.message);
-                router.push("/user/shop/products");
+                router.push("/dashboard/shop/products");
             } else {
                 toast.error(res.message);
             }
+
+            form.reset();
         } catch (error: any) {
             console.error(error);
         }

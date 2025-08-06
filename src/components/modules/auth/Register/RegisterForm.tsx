@@ -15,15 +15,17 @@ import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import Link from "next/link";
 import Logo from "@/assets/svgs/Logo";
 import { zodResolver } from "@hookform/resolvers/zod";
-
 import { registerUser } from "@/services/AuthService";
 import { toast } from "sonner";
 import { registrationSchema } from "./registerValidation";
+
+
 
 export default function RegisterForm() {
   const form = useForm({
     resolver: zodResolver(registrationSchema),
   });
+
 
   const {
     formState: { isSubmitting },

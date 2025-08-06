@@ -13,8 +13,7 @@ const FlashSale = async () => {
 
   return (
     <div className=" bg-white bg-opacity-50 pt-6 pb-8">
-      {
-        products.length == 0 ? <div></div> : <NMContainer className="my-16">
+      <NMContainer className="my-16">
         <div className="flex items-center justify-between ">
           <div className="flex items-center gap-8">
             <h2 className="text-3xl font-bold">Flash Sale</h2>
@@ -33,7 +32,6 @@ const FlashSale = async () => {
           ))}
         </div>
       </NMContainer>
-      }
     </div>
   )
 }

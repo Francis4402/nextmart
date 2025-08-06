@@ -69,7 +69,7 @@ const PaymentDetails = () => {
 
 
   return (
-    <div className="border-2 border-white bg-background brightness-105 rounded-md col-span-4 h-fit p-5">
+    <div className="border-2 border-white bg-background brightness-105 rounded-md lg:col-span-4 h-fit p-5">
       <h1 className="text-2xl font-bold">Payment Details</h1>
       <div className="space-y-2 mt-4">
         <div className="flex justify-between">

@@ -5,12 +5,12 @@ import { ICategory } from '@/types';
 import CreateCategoryModel from './CreateCategoryModel';
 import { NMTable } from '@/components/ui/core/NMTable';
 import { ColumnDef } from '@tanstack/react-table';
-import Image from 'next/image';
 import { Trash } from 'lucide-react';
 import { useState } from 'react';
 import { deleteCategory } from '@/services/Category';
 import { toast } from 'sonner';
 import DeleteConfirmationModal from '@/services/NMModal/DeleteConfirmationModal';
+import Image from 'next/image';
 
 type TCategoriesProps = {
   categories: ICategory[] 
@@ -32,7 +32,7 @@ const ManageCategories = ({categories}: TCategoriesProps) => {
     try {
       if(selectedId) {
         const res = await deleteCategory(selectedId);
-        console.log(res);
+
         if(res.success) {
           toast.success(res.message);
           setModelOpen(false);

@@ -21,8 +21,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { loginUser, reCaptchaTokenVerification } from "@/services/AuthService";
 import { toast } from "sonner";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { loginSchema } from "./loginValidation";
+import { useUser } from "@/context/UserContext";
 
 
 export default function LoginForm() {
@@ -34,6 +35,9 @@ export default function LoginForm() {
 
 
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirect = searchParams.get("redirectPath");
+  const {refreshUser} = useUser();
 
   const {
     formState: { isSubmitting },
@@ -55,7 +59,12 @@ export default function LoginForm() {
       const res = await loginUser(data);
       if (res?.success) {
         toast.success(res?.message);
-        router.push("/");
+        await refreshUser();
+        if (redirect) {
+          router.push(redirect);
+        } else {
+          router.push("/");
+        }
       } else {
         toast.error(res?.message);
       }

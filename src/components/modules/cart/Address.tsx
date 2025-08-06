@@ -24,7 +24,7 @@ const Address = () => {
     }
 
   return (
-    <div className="border-2 border-white bg-background brightness-105 rounded-md col-span-4  p-5 ">
+    <div className="border-2 border-white bg-background brightness-105 rounded-md lg:col-span-4 p-5 ">
       <div className="flex flex-col justify-between h-full">
         <h1 className="text-2xl font-bold">Address</h1>
         <p className="text-gray-500">Enter your address.</p>

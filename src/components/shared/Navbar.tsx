@@ -17,12 +17,16 @@ import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { logout } from "@/services/AuthService";
 import { usePathname, useRouter } from "next/navigation";
 import { protectedRoutes } from "@/constants";
+import { Badge } from "../ui/badge";
+import { useAppSelector } from "@/redux/hooks";
+import { orderedProductsSelector } from "@/redux/features/cartSlice";
 
 export default function Navbar() {
 
   const {user, setIsLoading} = useUser();
   const pathname = usePathname();
   const router = useRouter();
+  const products = useAppSelector(orderedProductsSelector);
   
   const handleLogOut = () => {
     setIsLoading(true);
@@ -37,34 +41,39 @@ export default function Navbar() {
     <header className="border-b w-full">
       <div className="container flex justify-between items-center mx-auto h-16 px-3">
         <Link href={"/"}>
-        <h1 className="text-2xl font-black flex items-center">
-          <Logo />
-          Next Mart
-        </h1>
+          <h1 className="md:text-2xl font-black flex items-center">
+            <Logo />
+            Next Mart
+          </h1>
         </Link>
-        <div className="max-w-md  flex-grow">
+        <div className="max-w-md md:flex hidden">
           <input
             type="text"
             placeholder="Search for products"
-            className="w-full max-w-6xl border border-gray-300 rounded-full py-2 px-5"
+            className="w-full border border-gray-300 rounded-full py-2 px-5"
           />
         </div>
         <nav className="flex gap-2">
-          <Button variant="outline" className="rounded-full p-0 size-10">
+          <Button variant="outline" className="rounded-full p-0 size-10 hidden lg:flex">
             <Heart />
           </Button>
           <Link href={"/cart"}>
-            <Button variant="outline" className="rounded-full p-0 size-10">
-              <ShoppingBag />
+            <Button variant="outline" className="relative rounded-full p-0 size-10">
+              <ShoppingBag className="size-4" />
+              <Badge className="absolute -top-1 -right-1 size-5 flex items-center justify-center p-0">
+                {products?.length ?? 0}
+              </Badge>
             </Button>
           </Link>
           
           {
             user ? (
               <>
-                <Link href={'/create-shop'}>
+                {user?.role === "admin" ? (
+                  <Link href={'/create-shop'} className="hidden md:block">
                     <Button variant={"outline"}>Create Shop</Button>
-                </Link>
+                  </Link>
+                ): ""}
 
                 <DropdownMenu>
                   <DropdownMenuTrigger>
@@ -76,13 +85,31 @@ export default function Navbar() {
                   <DropdownMenuContent align="end">
                     <DropdownMenuLabel>My Account</DropdownMenuLabel>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem>Profile</DropdownMenuItem>
                     <DropdownMenuItem>
-                      <Link href={`/${user?.role}/dashboard`}>
-                        Dashboard
-                      </Link>
+                          <Link href={'/dashboard/profile'}>
+                            Profile
+                          </Link>
                     </DropdownMenuItem>
-                    <DropdownMenuItem>My Shop</DropdownMenuItem>
+                    
+                    {user?.role === "admin" ? (
+                      <>
+                        <DropdownMenuItem>
+                          <Link href={'/create-shop'}>
+                            Create Shop
+                          </Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem>
+                          <Link href={'/dashboard'}>
+                            Dashboard
+                          </Link>
+                        </DropdownMenuItem>
+                      </>
+                    ) : ""}
+                    
+                    <span className="lg:hidden block">
+                      <DropdownMenuItem>My Shop</DropdownMenuItem>
+                    </span>
+                    
                     <DropdownMenuSeparator />
                     <DropdownMenuItem onClick={handleLogOut}>
                       <LogOut/>

@@ -4,11 +4,11 @@ import UserProvider from "@/context/UserContext";
 import StoreProviders from "./StoreProviders";
 
 const Providers = ({ children }: { children: React.ReactNode }) => {
-  return <UserProvider>
-    <StoreProviders>
+  return <StoreProviders> 
+    <UserProvider>
       {children}
-    </StoreProviders>
-  </UserProvider>;
+    </UserProvider>
+  </StoreProviders>;
 };
 
 export default Providers;

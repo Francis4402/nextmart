@@ -125,10 +125,12 @@ const AddProductForm = () => {
 
             if (res.success) {
                 toast.success(res.message);
-                router.push("/user/shop/products");
+                router.push("/dashboard/shop/products");
             } else {
                 toast.error(res.message);
             }
+
+            form.reset();
         } catch (err: any) {
             console.error(err);
         }

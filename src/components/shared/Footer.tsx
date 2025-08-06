@@ -35,7 +35,7 @@ const Footer = () => {
         </div>
 
         <hr />
-        <ul className="flex justify-center space-x-6 text-sm text-gray-800 font-medium my-4">
+        <ul className="flex flex-wrap justify-center space-x-6 text-sm text-gray-800 font-medium my-4">
           {navLinks.map((link) => (
             <li key={link.href}>
               <Link href={link.href} className="hover:text-purple-600">

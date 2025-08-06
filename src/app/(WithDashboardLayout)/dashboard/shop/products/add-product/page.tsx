@@ -1,5 +1,5 @@
 import AddProductForm from '@/components/modules/shop/product/AddProductForm'
-import React from 'react'
+
 
 const AddProduct = () => {
   return (

@@ -12,6 +12,9 @@ import { IMeta } from "@/types/meta";
 import { Checkbox } from "@/components/ui/checkbox";
 import DiscountModel from "./DiscountModel";
 import TablePagination from "@/components/ui/core/NMTable/TablePagination";
+import { deleteProduct } from "@/services/cart";
+import { toast } from "sonner";
+import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 
 
 const ManageProducts = ({
@@ -29,8 +32,18 @@ const ManageProducts = ({
     console.log("Viewing product:", product);
   };
 
-  const handleDelete = (productId: string) => {
-    console.log("Deleting product with ID:", productId);
+  const handleDelete = async (productId: string) => {
+    try {
+      const res = await deleteProduct(productId);
+
+      if (res.success) {
+        toast.success(res.message);
+      } else {
+        toast.error(res.message);
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const columns: ColumnDef<IProduct>[] = [
@@ -89,11 +102,6 @@ const ManageProducts = ({
       cell: ({ row }) => <span>{row.original.category.name}</span>,
     },
     {
-      accessorKey: "brand",
-      header: "Brand",
-      cell: ({ row }) => <span>{row.original.brand.name}</span>,
-    },
-    {
       accessorKey: "stock",
       header: "Stock",
       cell: ({ row }) => <span>{row.original.stock}</span>,
@@ -130,20 +138,32 @@ const ManageProducts = ({
             title="Edit"
             onClick={() =>
               router.push(
-                `/user/shop/products/update-product/${row.original._id}`
+                `/dashboard/shop/products/update-product/${row.original._id}`
               )
             }
           >
             <Edit className="w-5 h-5" />
           </button>
 
-          <button
-            className="text-gray-500 hover:text-red-500"
-            title="Delete"
-            onClick={() => handleDelete(row.original._id)}
-          >
-            <Trash className="w-5 h-5" />
-          </button>
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button size="sm" variant="ghost"><Trash /> </Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Delete Product</DialogTitle>
+              </DialogHeader>
+              <DialogDescription>
+                Are you sure you want to delete this product?
+              </DialogDescription>
+              <DialogFooter>
+                <DialogClose asChild>
+                  <Button variant="outline">Cancel</Button>
+                </DialogClose>
+                <Button variant={"destructive"} onClick={() => handleDelete(row.original._id)}>Delete</Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
         </div>
       ),
     },
@@ -155,7 +175,7 @@ const ManageProducts = ({
         <h1 className="text-xl font-bold">Manage Products</h1>
         <div className="flex items-center gap-2">
           <Button
-            onClick={() => router.push("/user/shop/products/add-product")}
+            onClick={() => router.push("/dashboard/shop/products/add-product")}
             size="sm"
           >
             Add Product <Plus />

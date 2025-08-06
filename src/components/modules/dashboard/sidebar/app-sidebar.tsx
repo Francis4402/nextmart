@@ -17,36 +17,40 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { NavMain } from "./nav-main";
-import { NavUser } from "./nav-user";
 import Link from "next/link";
 import Logo from "@/assets/svgs/Logo";
+
 
 
 const data = {
   navMain: [
     {
       title: "Dashboard",
-      url: "/user/dashboard",
+      url: "/dashboard",
       icon: SquareTerminal,
       isActive: true,
     },
     {
       title: "Shop",
-      url: "/user/shop/products",
+      url: "/dashboard/shop/products",
       icon: Bot,
       items: [
         {
           title: "Manage Products",
-          url: "/user/shop/products",
+          url: "/dashboard/shop/products",
         },
         {
           title: "Manage Categories",
-          url: "/user/shop/category",
+          url: "/dashboard/shop/category",
         },
         {
           title: "Manage Brands",
-          url: "/user/shop/brand",
+          url: "/dashboard/shop/brand",
         },
+        {
+          title: "Manage Coupons",
+          url: "/dashboard/shop/manage-coupon"
+        }
       ],
     },
 
@@ -57,7 +61,7 @@ const data = {
       items: [
         {
           title: "Profile",
-          url: "/profile",
+          url: "/dashboard/profile",
         },
       ],
     },
@@ -88,7 +92,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavMain items={data.navMain} />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser />
+        
       </SidebarFooter>
     </Sidebar>
   );

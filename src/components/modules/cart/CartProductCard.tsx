@@ -24,14 +24,14 @@ const CartProductCard = ({product}: {product: CartProduct}) => {
     
 
   return (
-    <div className='bg-white rounded-lg flex p-5 gap-5'>
-        <div className='h-full w-32 rounded-md overflow-hidden'>
+    <div className='bg-white rounded-lg flex md:flex-row flex-col p-5 gap-5 w-full'>
+        <div className='h-full md:w-fit rounded-md overflow-hidden items-center justify-center flex'>
             <Image src={product?.imageUrls?.[0]} height={200} width={200} alt='i' className='aspect-square object-cover' />
         </div>
 
         <div className='flex flex-col justify-between flex-grow'>
             <h1 className='text-xl font-semibold'>{product?.name}</h1>
-            <div className="flex gap-5 my-2">
+            <div className="flex md:flex-row flex-col gap-5 my-2">
                 <p>
                     <span className="text-gray-500">Color:</span>{" "}
                     <span className="font-semibold">Black</span>
@@ -44,7 +44,7 @@ const CartProductCard = ({product}: {product: CartProduct}) => {
 
             <hr className="my-1" />
 
-            <div className='flex items-center justify-between'>
+            <div className='flex md:flex-row flex-col gap-5 items-center justify-start md:justify-between'>
                 <h2>Price: {product.offerPrice ? currencyFormatter(product.offerPrice) : currencyFormatter(product.price)}</h2>
 
                 <div className='flex items-center gap-2'>
