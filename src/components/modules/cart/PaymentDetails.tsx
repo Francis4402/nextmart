@@ -4,7 +4,7 @@
 import { Button } from '@/components/ui/button'
 import { useUser } from '@/context/UserContext';
 import { currencyFormatter } from '@/lib/currencyFormatter';
-import { citySelector, clearCart, grandTotalSelector, orderedProductsSelector, orderSelector, shippingAddressSelector, shippingCostSelector, subTotalSelector } from '@/redux/features/cartSlice';
+import { citySelector, clearCart, couponSelector, discountAmountSelector, grandTotalSelector, orderedProductsSelector, orderSelector, shippingAddressSelector, shippingCostSelector, subTotalSelector } from '@/redux/features/cartSlice';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks'
 import { createOrder } from '@/services/cart';
 import { useRouter } from 'next/navigation';
@@ -15,11 +15,14 @@ const PaymentDetails = () => {
 
   const subtotal = useAppSelector(subTotalSelector);
   const shippingCost = useAppSelector(shippingCostSelector);
+  const discountAmount = useAppSelector(discountAmountSelector);
   const grandTotal = useAppSelector(grandTotalSelector);
   const order = useAppSelector(orderSelector);
   const city = useAppSelector(citySelector);
   const shippingAddress = useAppSelector(shippingAddressSelector);
   const cartProducts = useAppSelector(orderedProductsSelector);
+  const coupon = useAppSelector(couponSelector);
+
   const user = useUser();
   const router = useRouter();
 
@@ -49,8 +52,15 @@ const PaymentDetails = () => {
         throw new Error("Cart is empty, what are you trying to order ??")
       }
 
-      const res = await createOrder(order);
-      console.log(res);
+      let orderData;
+
+      if(coupon.code) {
+        orderData = {...order, coupon: coupon.code};
+      } else {
+        orderData = order;
+      }
+
+      const res = await createOrder(orderData);
 
       if (res.success) {
         toast.success("Order Created Successfully", {id: orderloading});
@@ -78,7 +88,7 @@ const PaymentDetails = () => {
         </div>
         <div className="flex justify-between">
           <p className="text-gray-500 ">Discount</p>
-          <p className="font-semibold">{currencyFormatter(0)}</p>
+          <p className="font-semibold">{currencyFormatter(discountAmount)}</p>
         </div>
         <div className="flex justify-between">
           <p className="text-gray-500 ">Shipment Cost</p>

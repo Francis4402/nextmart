@@ -9,4 +9,5 @@ export interface ICoupon {
     maxDiscountAmount?: number | null;
     startDate?: string;
     endDate?: string;
+    isActive?: boolean;
 }

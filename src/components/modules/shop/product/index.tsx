@@ -29,7 +29,7 @@ const ManageProducts = ({
 
 
   const handleView = (product: IProduct) => {
-    console.log("Viewing product:", product);
+    router.push(`/products/${product._id}`);
   };
 
   const handleDelete = async (productId: string) => {

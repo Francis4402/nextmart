@@ -57,14 +57,18 @@ export default function Navbar() {
           <Button variant="outline" className="rounded-full p-0 size-10 hidden lg:flex">
             <Heart />
           </Button>
-          <Link href={"/cart"}>
-            <Button variant="outline" className="relative rounded-full p-0 size-10">
-              <ShoppingBag className="size-4" />
-              <Badge className="absolute -top-1 -right-1 size-5 flex items-center justify-center p-0">
-                {products?.length ?? 0}
-              </Badge>
-            </Button>
-          </Link>
+          {
+            user ? (
+              <Link href={"/cart"}>
+                <Button variant="outline" className="relative rounded-full p-0 size-10">
+                  <ShoppingBag className="size-4" />
+                  <Badge className="absolute -top-1 -right-1 size-5 flex items-center justify-center p-0">
+                    {products?.length ?? 0}
+                  </Badge>
+                </Button>
+              </Link>
+            ) : ""
+          }
           
           {
             user ? (
@@ -93,7 +97,7 @@ export default function Navbar() {
                     
                     {user?.role === "admin" ? (
                       <>
-                        <DropdownMenuItem>
+                        <DropdownMenuItem className="md:hidden block">
                           <Link href={'/create-shop'}>
                             Create Shop
                           </Link>

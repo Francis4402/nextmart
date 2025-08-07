@@ -10,7 +10,9 @@ const ManageCoupon = async ({searchParams}: {searchParams: Promise<{page: string
 
   const {data, meta} = await getAllCoupons(page, "3");
 
-  console.log(data);
+  const coupons = data.result;
+
+  console.log(coupons);
 
   return (
     <div>
@@ -22,7 +24,7 @@ const ManageCoupon = async ({searchParams}: {searchParams: Promise<{page: string
       </div>
       <div>
         <CouponTable
-          coupons={data}
+          coupons={coupons}
           meta={meta}
         />
       </div>

@@ -4,16 +4,20 @@
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { shopSelector, subTotalSelector } from "@/redux/features/cartSlice";
-import { useAppSelector } from "@/redux/hooks";
+import { couponSelector, fetchCoupon, shopSelector, subTotalSelector } from "@/redux/features/cartSlice";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { Trash } from "lucide-react";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "sonner";
+import { Action } from "@reduxjs/toolkit";
 
 const Coupon = () => {
 
   const subTotal = useAppSelector(subTotalSelector);
   const shopId = useAppSelector(shopSelector);
+  const {isLoading, code} = useAppSelector(couponSelector);
+
+  const dispatch = useAppDispatch();
 
   const form = useForm();
 
@@ -23,12 +27,26 @@ const Coupon = () => {
     form.reset();
   };
 
-  const onSubmit: SubmitHandler<FieldValues> = async (data) => {
+  const onSubmit: SubmitHandler<FieldValues> = (data) => {
     try {
-      console.log(data);
+      
+      if (!shopId || shopId.trim() === "") {
+        throw new Error("Shop ID not found");
+      }
+
+      const res = dispatch(fetchCoupon({
+        couponCode: data.coupon,
+        subTotal,
+        shopId
+      }) as unknown as Action<string>).unwrap();
+
+      form.reset();
+
+      toast.success("Coupon applied successfully");
+      console.log(res);
     } catch (error: any) {
-      console.log(error);
-      toast.error(error.message);
+      console.error("Error applying coupon:", error);
+      toast.error(error.message || "Failed to apply coupon");
     }
   };
 
@@ -50,7 +68,7 @@ const Coupon = () => {
                       {...field}
                       className="rounded-full"
                       placeholder="Promo / Coupon code"
-                      value={field.value}
+                      value={field.value || code}
                     />
                   </FormControl>
                 </FormItem>
@@ -62,7 +80,7 @@ const Coupon = () => {
                 type="submit"
                 className="w-full text-xl font-semibold py-5 "
               >
-                Apply
+                {isLoading ? "Applying..." : "Apply"}
               </Button>
               {couponInput && (
                 <Button

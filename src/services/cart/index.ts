@@ -133,19 +133,24 @@ export const createOrder = async (order: IOrder) => {
     }
 };
 
-export const addCoupon = async ({shopId, subTotal, couponCode} : {shopId: string; subTotal: number; couponCode: string}) => {
+// services/cart.ts
+export const addCoupon = async (shopId: string, subTotal: number, couponCode: string) => {
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/order`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/coupon/${couponCode}`, {
         method: "POST",
         headers: {
           Authorization: (await cookies()).get("accessToken")!.value,
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({}),
+        body: JSON.stringify({ orderAmount: subTotal, shopId }),
       });
+
+      if (!res.ok) {
+        console.log("Error applying coupon");
+      }
   
       return await res.json();
-    } catch (error: any) {
-      return Error(error);
+    } catch (error) {
+      console.log(error);
     }
 };

@@ -1,7 +1,9 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { configureStore } from '@reduxjs/toolkit';
 import cartSlice from "./features/cartSlice";
 import { persistReducer, FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } from 'redux-persist';
 import storage from './storage';
+import { couponMiddleware } from './middlewares/coupon.middleware';
 
 
 const persistOptions = {
@@ -16,12 +18,13 @@ export const makeStore = () => {
     reducer: {
         cart: persistedCart
     },
-    middleware: (getDefaultMiddlewares) => getDefaultMiddlewares({
-      serializableCheck: {
-        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER]
-      }
-    }),
-  })
+    middleware: (getDefaultMiddlewares: any) => 
+      getDefaultMiddlewares({
+        serializableCheck: {
+          ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER]
+        }
+    }).concat(couponMiddleware),
+  });
 }
 
 // Infer the type of makeStore

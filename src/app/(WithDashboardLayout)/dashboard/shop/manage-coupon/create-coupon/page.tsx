@@ -12,6 +12,7 @@ import { createACoupon } from '@/services/Coupon';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { format } from 'date-fns';
 import { CalendarIcon } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import React, { useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
@@ -20,6 +21,8 @@ const CreateCoupon = () => {
 
     const [startDateOpen, setStartDateOpen] = useState(false);
     const [endDateOpen, setEndDateOpen] = useState(false);
+
+    const router = useRouter();
 
     const form = useForm({
         resolver: zodResolver(validateCouponForm),
@@ -34,6 +37,7 @@ const CreateCoupon = () => {
 
             if (res.success) {
                 toast.success(res.message);
+                router.push("/dashboard/shop/manage-coupon");
                 form.reset();
             } else {
                 toast.error(res.message);
