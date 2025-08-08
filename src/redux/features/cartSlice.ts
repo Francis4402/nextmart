@@ -48,7 +48,6 @@ export const fetchCoupon = createAsyncThunk(
     try {
       const res = await addCoupon(shopId, subTotal, couponCode);
 
-      // If the response indicates failure, throw an error
       if (!res.success) {
         throw new Error(res.message || "No coupon matches this code");
       }
@@ -56,7 +55,6 @@ export const fetchCoupon = createAsyncThunk(
       return res;
     } catch (error: any) {
       console.log(error);
-      // Re-throw the error so it gets caught by the rejected case
       throw new Error(error.message || "No coupon matches this code");
     }
   }
@@ -118,18 +116,18 @@ const cartSlice = createSlice({
       state.city = "";
       state.shippingAddress = "";
       state.shopId = "";
-      // Reset coupon when clearing cart
+
       state.coupon.code = "";
       state.coupon.discountAmount = 0;
       state.coupon.error = "";
       state.coupon.isLoading = false;
     },
-    clearCoupon: (state) => {
-      state.coupon.code = "";
-      state.coupon.discountAmount = 0;
-      state.coupon.error = "";
-      state.coupon.isLoading = false;
-    },
+    // clearCoupon: (state) => {
+    //   state.coupon.code = "";
+    //   state.coupon.discountAmount = 0;
+    //   state.coupon.error = "";
+    //   state.coupon.isLoading = false;
+    // },
   },
   extraReducers: (builder) => {
     builder.addCase(fetchCoupon.pending, (state) => {
@@ -235,7 +233,6 @@ export const {
   updateCity,
   updateShippingAddress,
   clearCart,
-  clearCoupon,
 } = cartSlice.actions;
 
 export default cartSlice.reducer;

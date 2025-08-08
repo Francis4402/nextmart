@@ -33,25 +33,27 @@ const ProductCard = ({ product }: { product: IProduct }) => {
   return (
     <Card className="p-3">
       <CardHeader className="relative p-0 h-48">
-        <Image
-          src={
-            product?.imageUrls[0] ||
-            "https://psediting.websites.co.in/obaju-turquoise/img/product-placeholder.png"
-          }
-          width={500}
-          height={500}
-          alt="product image"
-          className="rounded-sm h-48 object-cover"
-        />
-        {product?.stock === 0 && (
-          <div className="absolute left-2 top-0 bg-red-500 text-white px-2 rounded-full">
-            Out of Stock
-          </div>
-        )}
+        <Link href={`/products/${product?._id}`} passHref>
+          <Image
+            src={
+              product?.imageUrls[0] ||
+              "https://psediting.websites.co.in/obaju-turquoise/img/product-placeholder.png"
+            }
+            width={500}
+            height={500}
+            alt="product image"
+            className="rounded-sm h-48 object-cover"
+          />
+          {product?.stock === 0 && (
+            <div className="absolute left-2 top-0 bg-red-500 text-white px-2 rounded-full">
+              Out of Stock
+            </div>
+          )}
+        </Link>
       </CardHeader>
 
       <CardContent className=" p-0 mt-2">
-        <Link href={`/products/${product?._id}`} passHref>
+        
           <CardTitle
             title={product?.name}
             className="font-semibold cursor-pointer text-sm"
@@ -60,7 +62,7 @@ const ProductCard = ({ product }: { product: IProduct }) => {
               ? product?.name?.slice(0, 20) + "..."
               : product?.name}
           </CardTitle>
-        </Link>
+        
 
         <div className="flex items-center justify-between my-2">
           <p className="text-sm text-gray-600">

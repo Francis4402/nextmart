@@ -48,7 +48,9 @@ const ProductDetails = ({product}: {product: IProduct}) => {
             Category: {product?.category?.name}
           </p>
         </div>
+
         <hr />
+        
         <p className="my-2 font-bold">
           Price:{" "}
           {product?.offerPrice ? (

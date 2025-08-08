@@ -12,8 +12,6 @@ const ManageCoupon = async ({searchParams}: {searchParams: Promise<{page: string
 
   const coupons = data.result;
 
-  console.log(coupons);
-
   return (
     <div>
       <div className="flex justify-between items-center">

@@ -1,11 +1,15 @@
 "use client"
 
+import { Button } from '@/components/ui/button';
 import { NMTable } from '@/components/ui/core/NMTable';
 import TablePagination from '@/components/ui/core/NMTable/TablePagination';
+import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { deleteCoupons } from '@/services/Coupon';
 import { ICoupon } from '@/types/coupon';
 import { IMeta } from '@/types/meta'
 import { ColumnDef } from '@tanstack/react-table';
 import { Trash } from 'lucide-react';
+import { toast } from 'sonner';
 
 
 
@@ -14,8 +18,18 @@ const CouponTable = ({coupons, meta}: {coupons: ICoupon[], meta: IMeta}) => {
 
 
 
-    const handleDelete = (productId: string) => {
-        console.log(productId);
+    const handleDelete = async (productId: string) => {
+        try {
+          const res = await deleteCoupons(productId);
+
+          if (res?.success) {
+            toast.success(res?.message);
+          } else {
+            toast.error(res?.message);
+          }
+        } catch (error) {
+          console.log(error);
+        }
     }
 
     const columns: ColumnDef<ICoupon>[] = [
@@ -111,15 +125,26 @@ const CouponTable = ({coupons, meta}: {coupons: ICoupon[], meta: IMeta}) => {
           header: "Action",
           cell: ({ row }) => (
             <div className="flex items-center space-x-3">
-    
-    
-              <button
-                className="text-gray-500 hover:text-red-500"
-                title="Delete"
-                onClick={() => handleDelete(row.original._id!)}
-              >
-                <Trash className="w-5 h-5" />
-              </button>
+
+              <Dialog>
+                  <DialogTrigger asChild>
+                    <Button size="sm" variant="ghost"><Trash /> </Button>
+                  </DialogTrigger>
+                  <DialogContent>
+                    <DialogHeader>
+                      <DialogTitle>Delete Coupon</DialogTitle>
+                    </DialogHeader>
+                    <DialogDescription>
+                      Are you sure you want to delete this product?
+                    </DialogDescription>
+                    <DialogFooter>
+                      <DialogClose asChild>
+                        <Button variant="outline">Cancel</Button>
+                      </DialogClose>
+                      <Button variant={"destructive"} onClick={() => handleDelete(row.original._id!)}>Delete</Button>
+                    </DialogFooter>
+                  </DialogContent>
+              </Dialog>
             </div>
           ),
         },

@@ -18,7 +18,6 @@ const Coupon = () => {
   const {isLoading, code} = useAppSelector(couponSelector);
 
   const dispatch = useAppDispatch();
-
   const form = useForm();
 
   const couponInput = form.watch("coupon");
@@ -27,9 +26,8 @@ const Coupon = () => {
     form.reset();
   };
 
-  const onSubmit: SubmitHandler<FieldValues> = (data) => {
+  const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     try {
-      
       if (!shopId || shopId.trim() === "") {
         throw new Error("Shop ID not found");
       }
@@ -38,15 +36,24 @@ const Coupon = () => {
         couponCode: data.coupon,
         subTotal,
         shopId
-      }) as unknown as Action<string>).unwrap();
+      }) as unknown as Action<string>);
 
       form.reset();
 
-      toast.success("Coupon applied successfully");
+      toast.success("Coupon applied successfully.");
       console.log(res);
     } catch (error: any) {
       console.error("Error applying coupon:", error);
-      toast.error(error.message || "Failed to apply coupon");
+
+      const message = error.message?.toLowerCase() || "";
+
+      if (message.includes("expired")) {
+        toast.error("This coupon has expired. Please try another one.");
+      } else if (message.includes("no coupon")) {
+        toast.error("Invalid coupon code. Please try again.");
+      } else {
+        toast.error(error.message || "Failed to apply coupon");
+      }
     }
   };
 

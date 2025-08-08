@@ -47,7 +47,7 @@ const ManageBrands = ({brands}: {brands: IBrand[]}) => {
             header: () => <div>Brand Name</div>,
             cell: ({row}) => (
                 <div className='flex items-center space-x-3'>
-                    <Image src={row.original.logo} alt='i' width={40} height={40} className='w-8 h-8 rounded-full' />
+                    <Image src={row.original.logo} alt='i' width={40} height={40} className='w-fit h-8 rounded-full' />
                     <span className='truncate'>{row.original.name}</span>
                 </div>
             )

@@ -55,3 +55,24 @@ export const getAllCoupons = async (page?: string, limit?: string, query?: {[key
         console.log(error);
     }
 }
+
+
+export const deleteCoupons = async (couponId: string) => {
+    const token = await getValidToken();
+    
+    try {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/coupon/${couponId}`, {
+            method: "DELETE",
+            headers: {
+                Authorization: `${token}`,
+                "Content-Type": "application/json"
+            },
+        });
+        
+        revalidateTag("COUPON");
+        
+        return res.json();
+    } catch (error) {
+        console.log(error);
+    }
+}

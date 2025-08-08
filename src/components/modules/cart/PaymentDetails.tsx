@@ -100,11 +100,14 @@ const PaymentDetails = () => {
         <p className="font-semibold">{currencyFormatter(grandTotal)}</p>
       </div>
       <Button
-        onClick={handleOrder}
-        className="w-full text-xl font-semibold py-5"
+          onClick={handleOrder}
+          className="w-full text-xl font-semibold py-5"
+          disabled={!city || !shippingAddress}
+          title={!city || !shippingAddress ? "Please select a city and enter your address" : ""}
       >
-        Order Now
+          Order Now
       </Button>
+
     </div>
   )
 }
