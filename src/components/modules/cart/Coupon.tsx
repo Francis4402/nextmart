@@ -28,7 +28,7 @@ const Coupon = () => {
 
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     try {
-      if (!shopId || shopId.trim() === "") {
+      if (!shopId) {
         throw new Error("Shop ID not found");
       }
 

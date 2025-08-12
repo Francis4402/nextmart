@@ -79,7 +79,6 @@ const ManageProducts = ({
       enableSorting: false,
       enableHiding: false,
     },
-
     {
       accessorKey: "name",
       header: "Product Name",

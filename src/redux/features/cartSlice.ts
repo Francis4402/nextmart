@@ -66,7 +66,7 @@ const cartSlice = createSlice({
   reducers: {
     addProduct: (state, action) => {
       if(state.products.length === 0) {
-        state.shopId = action.payload.shop._id;
+        state.shopId = action.payload.shop._id || action.payload.shop;
       }
 
       const productToAdd = state.products.find(
@@ -122,12 +122,6 @@ const cartSlice = createSlice({
       state.coupon.error = "";
       state.coupon.isLoading = false;
     },
-    // clearCoupon: (state) => {
-    //   state.coupon.code = "";
-    //   state.coupon.discountAmount = 0;
-    //   state.coupon.error = "";
-    //   state.coupon.isLoading = false;
-    // },
   },
   extraReducers: (builder) => {
     builder.addCase(fetchCoupon.pending, (state) => {
@@ -168,6 +162,7 @@ export const orderSelector = (state: RootState) => {
     })),
     shippingAddress: `${state.cart.shippingAddress} - ${state.cart.city}`,
     paymentMethod: "Online",
+    shopId: state.cart.shopId
   };
 };
 

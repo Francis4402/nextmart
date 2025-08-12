@@ -110,9 +110,6 @@ export default function Navbar() {
                       </>
                     ) : ""}
                     
-                    <span className="lg:hidden block">
-                      <DropdownMenuItem>My Shop</DropdownMenuItem>
-                    </span>
                     
                     <DropdownMenuSeparator />
                     <DropdownMenuItem onClick={handleLogOut}>

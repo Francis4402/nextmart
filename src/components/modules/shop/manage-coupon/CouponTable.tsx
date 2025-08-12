@@ -16,8 +16,6 @@ import { toast } from 'sonner';
 
 const CouponTable = ({coupons, meta}: {coupons: ICoupon[], meta: IMeta}) => {
 
-
-
     const handleDelete = async (productId: string) => {
         try {
           const res = await deleteCoupons(productId);

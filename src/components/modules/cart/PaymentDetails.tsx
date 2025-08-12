@@ -52,13 +52,13 @@ const PaymentDetails = () => {
         throw new Error("Cart is empty, what are you trying to order ??")
       }
 
-      let orderData;
+      const orderData = {
+        ...order,
+        shop: order.shopId,
+        ...(coupon.code && { coupon: coupon.code })
+      };
 
-      if(coupon.code) {
-        orderData = {...order, coupon: coupon.code};
-      } else {
-        orderData = order;
-      }
+      console.log(orderData);
 
       const res = await createOrder(orderData);
 
@@ -99,6 +99,7 @@ const PaymentDetails = () => {
         <p className="text-gray-500 ">Grand Total</p>
         <p className="font-semibold">{currencyFormatter(grandTotal)}</p>
       </div>
+      
       <Button
           onClick={handleOrder}
           className="w-full text-xl font-semibold py-5"
