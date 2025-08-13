@@ -5,7 +5,7 @@ import Image from 'next/image';
 
 
 const Profile = () => {
-  const {user, setIsLoading} = useUser();
+  const {user} = useUser();
 
   console.log(user);
   return (

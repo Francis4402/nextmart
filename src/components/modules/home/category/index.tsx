@@ -15,13 +15,13 @@ const Category = async () => {
     <NMContainer>
         <div className='my-20'>
           <div className='flex items-center justify-between'>
-            <h2 className='font-bold text-2xl'>Category</h2>
+            <h2 className='font-bold md:text-2xl'>Featured Category</h2>
             <Link href={"/products"}>
               <Button variant={"outline"}>View All</Button>
             </Link>
           </div>
 
-          <div className='grid lg:grid-cols-5 md:grid-cols-3 gap-8 my-5'>
+          <div className='flex flex-row flex-wrap gap-5 my-5'>
               {
                 categories?.slice(0, 6)?.map((category: ICategory, idx: number) => <CategoryCard key={idx} category={category} />)
               }

@@ -11,6 +11,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { createShop } from '@/services/Shop';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useRouter } from 'next/navigation';
 import React, { useState } from 'react'
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
@@ -21,6 +22,7 @@ const CreateShopForm = () => {
     const [imageFiles, setImageFiles] = useState<File[] | []>([]);
     const [imagePreview, setImagePreview] = useState<string[] | []>([]);
 
+    const router = useRouter();
 
     const form = useForm({
       resolver: zodResolver(createShopSchema)
@@ -51,6 +53,13 @@ const CreateShopForm = () => {
   
         if (res.success) {
           toast.success(res.message);
+          
+          form.reset();
+          setImageFiles([]);
+          setImagePreview([]);
+
+          router.push("/");
+
         } else {
           toast.error(res.message);
         }

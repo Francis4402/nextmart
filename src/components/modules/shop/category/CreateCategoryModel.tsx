@@ -14,7 +14,8 @@ import { FieldValues, SubmitHandler, useForm } from "react-hook-form"
 import { toast } from "sonner"
 
 
-const CreateCategoryModel = () => {
+const CreateCategoryModel = ({isOpen, onOpenChange}: {isOpen: boolean, onOpenChange: (isOpen: boolean) => void}) => {
+
 
     const [imageFiles, setImageFiles] = useState<File[] | []>([]);
     const [imagePreview, setImagePreview] = useState<string[] | []>([]);
@@ -36,6 +37,10 @@ const CreateCategoryModel = () => {
 
             if (res?.success) {
                 toast.success("Category Created Successfully");
+                form.reset();
+                onOpenChange(false);
+                setImageFiles([]);
+                setImagePreview([]);
             } else {
                 toast.error(res?.message);
             }
@@ -45,7 +50,8 @@ const CreateCategoryModel = () => {
     }
 
   return (
-    <Dialog>
+    <Dialog onOpenChange={onOpenChange} open={isOpen}>
+
         <DialogTrigger asChild>
             <Button>Create Category</Button>
         </DialogTrigger>

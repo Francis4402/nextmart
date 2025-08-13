@@ -11,13 +11,15 @@ import React, { useState } from 'react'
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 
-const CreateBrandModal = () => {
+const CreateBrandModal = ({isOpen, onOpenChange}: {isOpen: boolean, onOpenChange: (isOpen: boolean) => void}) => {
+
 
     const [imageFiles, setImageFiles] = useState<File[] | []>([]);
     const [imagePreview, setImagePreview] = useState<string[] | []>([]);
+
     const form = useForm();
 
-    const {formState: {isSubmitting}} = form || {};
+    const {formState: {isSubmitting}} = form;
 
     const onSubmit: SubmitHandler<FieldValues> = async (data) => {
         try {
@@ -29,6 +31,10 @@ const CreateBrandModal = () => {
 
             if (res.success) {
                 toast.success(res.message);
+                form.reset();
+                onOpenChange(false);
+                setImageFiles([]);
+                setImagePreview([]);
             } else {
                 toast.error(res.message);
             }
@@ -40,7 +46,7 @@ const CreateBrandModal = () => {
     }
 
   return (
-    <Dialog>
+    <Dialog onOpenChange={onOpenChange} open={isOpen}>
         <DialogTrigger asChild>
             <Button size={"sm"}>Create Brand</Button>
         </DialogTrigger>

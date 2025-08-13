@@ -15,6 +15,7 @@ import DeleteConfirmationModal from '@/components/ui/core/NMModal/DeleteConfirma
 const ManageBrands = ({brands}: {brands: IBrand[]}) => {
 
     const [isModalOpen, setModalOpen] = useState(false);
+    const [isDialogOpen, setDialogOpen] = useState(false);
     const [selectedId, setSelectedId] = useState<string | null>(null);
     const [selectedItem, setSelectedItem] = useState<string | null>(null);
 
@@ -89,7 +90,8 @@ const ManageBrands = ({brands}: {brands: IBrand[]}) => {
         <div className='flex items-center justify-between'>
             <h1 className='text-xl font-bold'>Manage Brands</h1>
 
-            <CreateBrandModal />
+            <CreateBrandModal isOpen={isDialogOpen} onOpenChange={setDialogOpen} />
+
         </div>
 
         <NMTable columns={columns} data={brands || []} />

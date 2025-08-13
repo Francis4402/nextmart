@@ -48,8 +48,8 @@ const data = {
           url: "/dashboard/shop/brand",
         },
         {
-          title: "Manage Coupons",
-          url: "/dashboard/shop/manage-coupon"
+          title: "My Shop",
+          url: "/dashboard/shop/my-shop"
         }
       ],
     },

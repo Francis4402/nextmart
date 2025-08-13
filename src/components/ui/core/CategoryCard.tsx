@@ -3,17 +3,17 @@ import Image from "next/image";
 
 const CategoryCard = ({ category }: { category: ICategory }) => {
   return (
-    <div className="bg-white bg-opacity-50 border-2 border-white rounded-2xl text-center p-6 h-44">
-      <div className="w-24 h-24 mx-auto">
+    <div className="bg-white bg-opacity-50 border-2 border-white rounded-2xl text-center p-6 w-fit h-fit">
+      <div className="w-8 h-8 mx-auto">
         <Image
           src={category?.icon}
-          width={96}
-          height={96}
+          width={100}
+          height={100}
           alt="category icon"
           className="w-full h-full object-contain"
         />
       </div>
-      <h3 className="text-lg font-semibold truncate mt-3">{category?.name}</h3>
+      <h3 className="text-sm font-semibold truncate mt-3">{category?.name}</h3>
     </div>
   );
 };
