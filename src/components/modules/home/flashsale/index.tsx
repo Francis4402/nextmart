@@ -14,7 +14,7 @@ const FlashSale = async () => {
   return (
     <div className=" bg-white bg-opacity-50 pt-6 pb-8">
       {
-        products.length > 0 && (
+        products?.length > 0 && (
           <NMContainer className="my-16">
             <div className="flex items-center justify-between ">
               <div className="flex items-center gap-8">
