@@ -4,7 +4,7 @@
 import { Button } from '@/components/ui/button'
 import { useUser } from '@/context/UserContext';
 import { currencyFormatter } from '@/lib/currencyFormatter';
-import { citySelector, clearCart, couponSelector, discountAmountSelector, grandTotalSelector, orderedProductsSelector, orderSelector, shippingAddressSelector, shippingCostSelector, subTotalSelector } from '@/redux/features/cartSlice';
+import { citySelector, clearCart, grandTotalSelector, orderedProductsSelector, orderSelector, shippingAddressSelector, shippingCostSelector, subTotalSelector } from '@/redux/features/cartSlice';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks'
 import { createOrder } from '@/services/cart';
 import { useRouter } from 'next/navigation';
@@ -15,13 +15,11 @@ const PaymentDetails = () => {
 
   const subtotal = useAppSelector(subTotalSelector);
   const shippingCost = useAppSelector(shippingCostSelector);
-  const discountAmount = useAppSelector(discountAmountSelector);
   const grandTotal = useAppSelector(grandTotalSelector);
   const order = useAppSelector(orderSelector);
   const city = useAppSelector(citySelector);
   const shippingAddress = useAppSelector(shippingAddressSelector);
   const cartProducts = useAppSelector(orderedProductsSelector);
-  const coupon = useAppSelector(couponSelector);
 
   const user = useUser();
   const router = useRouter();
@@ -54,8 +52,7 @@ const PaymentDetails = () => {
 
       const orderData = {
         ...order,
-        shop: order.shopId,
-        ...(coupon.code && { coupon: coupon.code })
+        shop: order.shopId
       };
 
       console.log(orderData);
@@ -65,7 +62,11 @@ const PaymentDetails = () => {
       if (res.success) {
         toast.success("Order Created Successfully", {id: orderloading});
         dispatch(clearCart());
-        router.push(res.data.paymentUrl);
+        if (res.data?.paymentUrl) {
+          router.push(res.data.paymentUrl);
+        } else {
+          toast.error("Payment URL not available", {id: orderloading});
+        }
       }
 
       if (!res.success) {
@@ -85,10 +86,6 @@ const PaymentDetails = () => {
         <div className="flex justify-between">
           <p className="text-gray-500 ">Subtotal</p>
           <p className="font-semibold">{currencyFormatter(subtotal)}</p>
-        </div>
-        <div className="flex justify-between">
-          <p className="text-gray-500 ">Discount</p>
-          <p className="font-semibold">{currencyFormatter(discountAmount)}</p>
         </div>
         <div className="flex justify-between">
           <p className="text-gray-500 ">Shipment Cost</p>

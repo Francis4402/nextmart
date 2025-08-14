@@ -104,7 +104,7 @@ export const deleteProduct = async (productId: string): Promise<any> => {
         const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/product/${productId}`, {
             method: "DELETE",
             headers: {
-                Authorization: token
+                Authorization: `${token}`
             }
         });
 
@@ -121,15 +121,20 @@ export const createOrder = async (order: IOrder) => {
       const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/order`, {
         method: "POST",
         headers: {
-          Authorization: (await cookies()).get("accessToken")!.value,
           "Content-Type": "application/json",
+          Authorization: (await cookies()).get("accessToken")!.value,
         },
         body: JSON.stringify(order),
       });
   
       return await res.json();
     } catch (error: any) {
-      return Error(error);
+      // Return a properly formatted error response instead of an Error object
+      return {
+        success: false,
+        message: error.message || "Failed to create order",
+        data: { paymentUrl: null }
+      };
     }
 };
 

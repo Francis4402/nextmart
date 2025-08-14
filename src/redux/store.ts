@@ -3,7 +3,6 @@ import { configureStore } from '@reduxjs/toolkit';
 import cartSlice from "./features/cartSlice";
 import { persistReducer, FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } from 'redux-persist';
 import storage from './storage';
-import { couponMiddleware } from './middlewares/coupon.middleware';
 
 
 const persistOptions = {
@@ -23,7 +22,7 @@ export const makeStore = () => {
         serializableCheck: {
           ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER]
         }
-    }).concat(couponMiddleware),
+    }),
   });
 }
 

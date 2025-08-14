@@ -4,7 +4,6 @@ import { getMyShops } from '@/services/Shop';
 
 const MyShop = async () => {
   try {
-
     const response = await getMyShops();
     
     let shopData;

@@ -38,7 +38,7 @@ export const getMyShops = async () => {
         return data;
     } catch (error) {
         console.error('Error fetching shops:', error);
-        // Return a consistent structure even on error
+        
         return { data: [] };
     }
 }

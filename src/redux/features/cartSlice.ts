@@ -1,8 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { IProduct } from "@/types/product";
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 import { RootState } from "../store";
-import { addCoupon } from "@/services/cart";
 
 export interface CartProduct extends IProduct {
   orderQuantity: number;
@@ -13,12 +12,6 @@ interface InitialState {
   city: string;
   shippingAddress: string;
   shopId: string;
-  coupon: {
-    code: string;
-    discountAmount: number;
-    isLoading: boolean;
-    error: string;
-  };
 }
 
 const initialState: InitialState = {
@@ -26,39 +19,7 @@ const initialState: InitialState = {
   city: "",
   shippingAddress: "",
   shopId: "",
-  coupon: {
-    code: "",
-    discountAmount: 0,
-    isLoading: false,
-    error: "",
-  },
 };
-
-export const fetchCoupon = createAsyncThunk(
-  "cart/fetchCoupon",
-  async ({
-    couponCode,
-    subTotal,
-    shopId,
-  }: {
-    couponCode: string;
-    subTotal: number;
-    shopId: string;
-  }) => {
-    try {
-      const res = await addCoupon(shopId, subTotal, couponCode);
-
-      if (!res.success) {
-        throw new Error(res.message || "No coupon matches this code");
-      }
-
-      return res;
-    } catch (error: any) {
-      console.log(error);
-      throw new Error(error.message || "No coupon matches this code");
-    }
-  }
-);
 
 const cartSlice = createSlice({
   name: "cart",
@@ -116,30 +77,7 @@ const cartSlice = createSlice({
       state.city = "";
       state.shippingAddress = "";
       state.shopId = "";
-
-      state.coupon.code = "";
-      state.coupon.discountAmount = 0;
-      state.coupon.error = "";
-      state.coupon.isLoading = false;
     },
-  },
-  extraReducers: (builder) => {
-    builder.addCase(fetchCoupon.pending, (state) => {
-      state.coupon.isLoading = true;
-      state.coupon.error = "";
-    });
-    builder.addCase(fetchCoupon.rejected, (state, action) => {
-      state.coupon.isLoading = false;
-      state.coupon.error = action.error.message as string;
-      state.coupon.code = "";
-      state.coupon.discountAmount = 0;
-    });
-    builder.addCase(fetchCoupon.fulfilled, (state, action) => {
-      state.coupon.isLoading = false;
-      state.coupon.error = "";
-      state.coupon.code = action.payload.data.coupon.code;
-      state.coupon.discountAmount = action.payload.data.discountAmount;
-    });
   },
 });
 
@@ -198,17 +136,8 @@ export const shippingCostSelector = (state: RootState) => {
 export const grandTotalSelector = (state: RootState) => {
   const subTotal = subTotalSelector(state);
   const shippingCost = shippingCostSelector(state);
-  const discountAmount = discountAmountSelector(state);
-
-  return subTotal - discountAmount + shippingCost;
-};
-
-export const couponSelector = (state: RootState) => {
-  return state.cart.coupon;
-};
-
-export const discountAmountSelector = (state: RootState) => {
-  return state.cart.coupon.discountAmount;
+  
+  return subTotal + shippingCost;
 };
 
 //* Address
