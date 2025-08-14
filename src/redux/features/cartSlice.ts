@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { IProduct } from "@/types/product";
 import { createSlice } from "@reduxjs/toolkit";
 import { RootState } from "../store";

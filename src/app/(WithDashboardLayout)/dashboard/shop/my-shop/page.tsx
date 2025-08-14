@@ -1,39 +1,37 @@
+"use client"
+
 import ManageShop from '@/components/modules/shop/myshop';
 import { getMyShops } from '@/services/Shop';
+import { IShop } from '@/types/shop';
+import { useEffect, useState } from 'react';
 
 
-const MyShop = async () => {
-  try {
-    const response = await getMyShops();
-    
-    let shopData;
-    
-    if (response?.data) {
+const MyShop = () => {
+  const [shopData, setShopData] = useState<IShop[]>([]);
 
-      if (Array.isArray(response.data)) {
-        shopData = response.data;
-      } else {
-        shopData = [response.data];
+  useEffect(() => {
+    const fetchShops = async () => {
+      try {
+        const response = await getMyShops();
+        
+        const shops = response?.data ? 
+          (Array.isArray(response.data) ? response.data : [response.data]) : 
+          [];
+        
+        setShopData(shops);
+      } catch (error) {
+        console.error('Error fetching shops:', error);
       }
-    } else {
-      shopData = [];
-    }
+    };
+
+    fetchShops();
+  }, []);
     
-    return (
-      <div>
-        <ManageShop shop={shopData} />
-      </div>
-    );
-  } catch (error) {
-    console.error('Error in MyShop component:', error);
-    return (
-      <div>
-        <div className="p-4 border rounded-md text-center text-red-500">
-          <p>Error loading shop data. Please try again later.</p>
-        </div>
-      </div>
-    );
-  }
+  return (
+    <div>
+      <ManageShop shop={shopData} />
+    </div>
+  );
 }
 
 export default MyShop
