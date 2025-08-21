@@ -111,6 +111,10 @@ export default function LoginForm() {
             )}
           />
 
+          <Link href="/forgot-password" className="flex justify-end">
+            <Button variant={"link"}>Forgot Password ?</Button>
+          </Link>
+
           <div className="flex mt-3 w-full">
             <ReCAPTCHA
               sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_CLIENT_KEY || ""}

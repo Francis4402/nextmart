@@ -1,5 +1,6 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+
 "use server";
+
 
 import { jwtDecode } from "jwt-decode";
 import { cookies } from "next/headers";
@@ -22,8 +23,8 @@ export const registerUser = async (userData: FieldValues) => {
     }
 
     return result;
-  } catch (error: any) {
-    return Error(error);
+  } catch (error) {
+    console.log(error);
   }
 };
 
@@ -45,8 +46,8 @@ export const loginUser = async (userData: FieldValues) => {
     }
 
     return result;
-  } catch (error: any) {
-    return Error(error);
+  } catch (error) {
+    console.log(error);
   }
 };
 
@@ -76,10 +77,84 @@ export const reCaptchaTokenVerification = async (token: string) => {
     });
 
     return res.json();
-  } catch (err: any) {
-    return Error(err);
+  } catch (error) {
+    console.log(error);
   }
 };
+
+
+export const forgotpassword = async (data: {email: string}) => {
+  try {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/auth/forgot-password`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+    const result = await res.json();
+
+    return result;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export const verifyToken = async (data: {email: string, otp: string}) => {
+  try {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/auth/verify-otp`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+
+    const result = await res.json();
+
+    if (result.success) {
+      (await cookies()).set("refreshToken", result.data.refreshToken);
+    }
+
+    return result;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+
+export const resetPassword = async (data: {newPassword: string}) => {
+  try {
+    
+    const cookieStore = await cookies();
+    const refreshToken = cookieStore.get("refreshToken")?.value;
+    
+    if (!refreshToken) {
+      throw new Error("No authentication token found. Please verify OTP first.");
+    }
+
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/auth/reset-password`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${refreshToken}`,
+      },
+      body: JSON.stringify({
+        newPassword: data.newPassword
+      }),
+    });
+
+    if (!res.ok) {
+      const errorData = await res.json();
+      throw new Error(errorData.message || "Failed to reset password");
+    }
+
+    return await res.json();
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
 
 
 export const logout = async () => {
@@ -97,7 +172,7 @@ export const getNewToken = async () => {
     });
 
     return res.json();
-  } catch (error: any) {
-    return Error(error);
+  } catch (error) {
+    console.log(error);
   }
 }
