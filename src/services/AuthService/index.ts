@@ -113,7 +113,7 @@ export const verifyToken = async (data: {email: string, otp: string}) => {
     const result = await res.json();
 
     if (result.success) {
-      (await cookies()).set("refreshToken", result.data.refreshToken);
+      (await cookies()).set("resetToken", result.data.resetToken);
     }
 
     return result;
@@ -127,9 +127,9 @@ export const resetPassword = async (data: {newPassword: string}) => {
   try {
     
     const cookieStore = await cookies();
-    const refreshToken = cookieStore.get("refreshToken")?.value;
+    const resetToken  = cookieStore.get("resetToken")?.value;
     
-    if (!refreshToken) {
+    if (!resetToken) {
       throw new Error("No authentication token found. Please verify OTP first.");
     }
 
@@ -137,19 +137,21 @@ export const resetPassword = async (data: {newPassword: string}) => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${refreshToken}`,
+        "Authorization": `Bearer ${resetToken}`,
       },
       body: JSON.stringify({
+        token: resetToken,
         newPassword: data.newPassword
       }),
     });
 
+    const result = await res.json();
+
     if (!res.ok) {
-      const errorData = await res.json();
-      throw new Error(errorData.message || "Failed to reset password");
+      throw new Error(result.message || "Failed to reset password");
     }
 
-    return await res.json();
+    return result;
   } catch (error) {
     console.log(error);
     throw error;

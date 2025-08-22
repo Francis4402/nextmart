@@ -28,7 +28,7 @@ const ResetPasswordForm = () => {
           if (res?.success) {
             toast.success("Password reset successfully!");
             
-            document.cookie = "refreshToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+            document.cookie = "resetToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
             router.push("/login");
           } else {
             toast.error(res?.message || "Password reset failed");
